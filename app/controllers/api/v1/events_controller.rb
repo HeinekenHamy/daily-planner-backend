@@ -4,6 +4,14 @@ class Api::V1::EventsController < ApplicationController
 
   def index
     @events = @current_user.events
+
+    if params[:date].present?
+      @events = @events.where(date: params[:date])
+    elsif params[:month].present? && params[:year].present?
+      start_date = Date.new(params[:year].to_i, params[:month].to_i, 1)
+      end_date = start_date.end_of_month
+      @events = @events.where(date: start_date..end_date)
+    end
     render json: @events
   end
 
