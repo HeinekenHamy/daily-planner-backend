@@ -12,17 +12,17 @@ class Api::V1::EventsController < ApplicationController
       end_date = start_date.end_of_month
       @events = @events.where(date: start_date..end_date)
     end
-    render json: @events
+    render json: EventBlueprint.render(@events.order(date: :asc))
   end
 
   def show
-    render json: @event
+    render json: EventBlueprint.render(@event)
   end
 
   def create
     @event = @current_user.events.build(event_params)
     if @event.save
-      render json: @event, status: :created
+      render json: EventBlueprint.render(@event), status: :created
     else
       render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class Api::V1::EventsController < ApplicationController
 
   def update
     if @event.update(event_params)
-      render json: @event
+      render json: EventBlueprint.render(@event)
     else
       render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
     end
