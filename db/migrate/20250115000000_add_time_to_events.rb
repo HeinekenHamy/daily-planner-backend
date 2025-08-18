@@ -3,3 +3,4 @@ class AddTimeToEvents < ActiveRecord::Migration[8.0]
     add_column :events, :time, :time
   end
 end
+
