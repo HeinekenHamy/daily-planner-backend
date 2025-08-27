@@ -11,8 +11,8 @@ class Api::V1::AuthController < ApplicationController
   end
 
   def login
-    user = User.find_by(email: params[:email])
-    if user&.authenticate(params[:password])
+    user = User.find_by(email: params[:auth][:email])
+    if user&.authenticate(params[:auth][:password])
       token = JsonWebToken.encode(user_id: user.id)
       render json: { token:, user: UserBlueprint.render_as_hash(user) }, status: :ok
     else
